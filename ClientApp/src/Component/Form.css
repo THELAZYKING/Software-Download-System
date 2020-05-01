@@ -1,0 +1,81 @@
+
+  
+button {
+    cursor: pointer;
+    margin-left: 35%;
+    width: 30%;
+    margin-top: 40px;
+    padding: 10px;
+    background: rgb(122, 226, 96);
+    font-family: 'Roboto Slab', sans-serif;
+    font-size: 12px;
+    border: none;
+    outline: none;
+    color: white;
+    border-bottom: 2px solid #797979;
+}  
+    button:hover {
+      background-color: #a1a1a1;
+    }
+  
+    button:active {
+      background-color: #888;
+    }
+  
+    .nav-title {
+      color : #d2fafb;
+      text-align: center;
+  }
+
+  .Nav-form {
+    background-color: #20303F;
+    padding: 20px;
+    position: absolute;
+    top:0px;
+    height: 400px;
+    width: 100%;
+
+}
+
+.form-container {
+  width: 100%;
+  position: relative;
+  top:200px;
+  margin-bottom: 60px;
+
+}
+
+.Nav {
+    background-color: #20303F;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.astrick {
+    color: red;
+    font-size : 15px;
+}
+
+.Capsule
+{
+    background-color : grey;
+    border: 1px solid black;
+    border-radius : 4px;
+    padding: 5px;
+    margin:10px;
+    display : inline;
+}
+
+.Error {
+    display: block;
+    background-color: #F08080;
+    color: #8B0000;
+    font-size : 12px;
+    margin : 5px;
+    margin-top : 20px;
+}
+
+.form-loader{
+    display: inline;
+    margin : 5px;
+}
