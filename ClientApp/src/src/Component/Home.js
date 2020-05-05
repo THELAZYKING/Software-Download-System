@@ -14,8 +14,8 @@ class HomePage extends React.Component {
             GetData : [],
             sortType : 'desc',
             styleType : 'grid',
-            currentPage : 1,
-            PostPerPage: '3',
+            currentPage : '1',
+            PostPerPage: '10',
             linkstatus : 'Top Request',
             display : 'Compact'
         }
@@ -24,8 +24,6 @@ class HomePage extends React.Component {
         this.handleStyle = this.handleStyle.bind(this);
         this.HandleLike = this.HandleLike.bind(this);
         this.handleDisplay = this.handleDisplay.bind(this);
-        this.handleShift = this.handleShift.bind(this);
-
 
     }
 
@@ -38,38 +36,19 @@ class HomePage extends React.Component {
         if(this.state.display === 'Compact')
         {
           this.setState({
-              display: "Enlarged",
-              PostPerPage: "12",
-              currentPage : 1
+            display : "Enlarged"
           })
         }
         else
         {
           this.setState({
-              display: "Compact",
-              PostPerPage: "3",
-              sortType: "Asc",
-              currentPage : 1
+            display : "Compact"
           }) 
         }
       }
       searchText = e => {
         this.setState({ searchBar: e.target.value });
-    };  
-
-    handleShift(data) {
-        if (data === "inc") {
-            this.setState(prevState => {
-                return { currentPage: prevState.currentPage + 1 }
-            });
-        }
-        else {
-            this.setState(prevState => {
-                return { currentPage: prevState.currentPage - 1 }
-            });
-            
-        }
-    }
+      };  
 
     async HandleLike(data) {
 
@@ -124,7 +103,7 @@ class HomePage extends React.Component {
     renderDatasetsTable(Dataset) {
         return (
             <div className="SearchBack">
-                <div className={this.state.styleType === 'grid' ?  this.state.display === "Enlarged" ? "DataBox1" : "DataBox"  : "DataBoxList"} key={Dataset.id}>
+                <div className={this.state.styleType === 'grid' ? "DataBox" : "DataBoxList" } key={Dataset.id}>
                   {/* {software_Name} */}
                   <div className={this.state.styleType === 'grid' ? "DataTitle" : "DataTitleList" }> {Dataset.software_Name}</div>
                   {/* {software_Version} */}
@@ -147,109 +126,99 @@ class HomePage extends React.Component {
       }
 
 
-    render() {
+    render()
+    {
 
-        // Adding Custom styles to the Home Page Element
-        const ui_mkrequest_button = { marginLeft: "5%", marginRight: "2%", marginTop: "25px", width: "15%", padding: "15px", backgroundColor: "#fe346e", Color: "#d2fafb", float: "Right" };
-        const ui_search_title = { display: "inline-block", marginRight: "10%", fontSize: "20px", marginTop: "15px", marginLeft: "15px" };
-        const ui_icon = { marginLeft: "5px", marginRight: "auto", };
-        const ui_icon_sel = { marginLeft: "5px", marginRight: "auto", color: "#5DADEC" };
-        const quick_link1 = { marginLeft: "6%", width: "18%", marginRight: "0px", fontSize: "10px" };
-        const quick_link2 = { marginLeft: "4%", marginRight: "2%", width: "18%", fontSize: "10px" };
+      // Adding Custom styles to the Home Page Element
+     const ui_mkrequest_button = { marginLeft : "5%" , marginRight : "2%", marginTop : "25px", width  : "15%" , padding : "15px", backgroundColor: "#fe346e", Color: "#d2fafb", float : "Right"};
+      const ui_search_title = { display: "inline-block", marginRight: "10%", fontSize : "20px", marginTop: "15px", marginLeft: "15px"};
+      const ui_icon = { marginLeft: "5px", marginRight: "auto",};
+        const ui_icon_sel = {  marginLeft: "5px", marginRight: "auto",color: "#5DADEC" };
+        const quick_link1 = { marginLeft: "6%", width: "18%", marginRight : "0px", fontSize: "10px"};
+        const quick_link2 = { marginLeft: "4%", marginRight: "2%", width: "18%" , fontSize: "10px"};
         const quick_link3 = { marginLeft: "2%", marginRight: "4%", width: "18%", fontSize: "10px" };
         const quick_link4 = { marginLeft: "0px", marginRight: "2%", width: "18%", fontSize: "10px" };
 
 
 
-        const ui_icon1 = { width: "8%" };
+        const ui_icon1 = {width : "8%"};
 
 
 
-        // Add variable title to the Software Data Header
+      // Add variable title to the Software Data Header
 
-        const Search_title = (this.state.searchBar.length === 0) ? <h2 style={ui_search_title}> {this.state.linkstatus}</h2> :
-            <h2 style={ui_search_title}>Result for : {this.state.searchBar}</h2>;
+    const Search_title = (this.state.searchBar.length === 0)? <h2 style={ui_search_title}> {this.state.linkstatus}</h2>: 
+                                                                 <h2 style={ui_search_title}>Result for : {this.state.searchBar}</h2>;
+
+    
+
+    
+    
+    
+    const { searchBar, sortType } = this.state;
+    const filteredSoftware = this.state.GetData.filter(Software => {
+      return Software.software_Name.toLowerCase().indexOf(searchBar.toLowerCase()) !== -1;
+    });
 
 
-
-
-
-
-        const { searchBar, sortType } = this.state;
-        const filteredSoftware = this.state.GetData.filter(Software => {
-            return Software.software_Name.toLowerCase().indexOf(searchBar.toLowerCase()) !== -1;
-        });
-
-
-        const nsdonly = this.state.linkstatus === "Recent Pending from NSD" ?
+        const nsdonly = this.state.linkstatus === "nsd" ? 
             filteredSoftware.filter(software => {
                 return software.level_Status === "Request is pending from NSD";
             }) : filteredSoftware;
 
-        const complete = this.state.linkstatus === "All Completed Requests" ?
+        const complete = this.state.linkstatus === "complete" ?
             filteredSoftware.filter(software => {
                 return software.level_Status === "Request is complete";
             }) : nsdonly;
 
+        
 
-
-        const sorted = complete.sort((a, b) => {
-
-            const isReversed = (sortType === 'asc') ? 1 : -1;
-            return isReversed * a.software_Name.localeCompare(b.software_Name)
-        }
+    const sorted = complete.sort((a, b) => {
+    
+        const isReversed = (sortType === 'asc') ? 1 : -1;
+        return isReversed * a.software_Name.localeCompare(b.software_Name)
+    }
         )
 
-        const liking = (this.state.linkstatus === "Top Request") ?
+        const liking = (this.state.linkstatus === "like") ?
             sorted.sort((a, b) => {
                 return b.likes - a.likes
             })
             : sorted;
 
-
-
-        // Pagination
-        const IndexofLastPost = (this.state.currentPage) * (this.state.PostPerPage);
+// Pagination
+      const IndexofLastPost = (this.state.currentPage)*(this.state.PostPerPage);
         const IndexofFirstPost = IndexofLastPost - (this.state.PostPerPage)
         const currentPost = liking.slice(IndexofFirstPost, IndexofLastPost);
 
-        const Pages = [];
+      const Pages= [];
 
-        for (let i = 1; i <= Math.ceil(liking.length / (this.state.PostPerPage)); i++) {
-            Pages.push(i);
-        }
+      for(let i = 1 ; i <= Math.ceil(liking.length/(this.state.PostPerPage)); i++)
+      {
+        Pages.push(i);
+      }
 
-        let Pagination = this.state.display === "Enlarged" ? Pages.map(number => (
-            <div className="Page-box" key={number}>
-                <div className={this.state.currentPage === number ? "Page-Block-sel" : "Page-Block"} onClick={() => this.Paginating(number)}>{number}</div>
-            </div>
-        )) :
-            Pages.map(number => (
-                <div className="Page-box" key={number}>
-                    <div onClick={() => this.Paginating(number)} >
-                        <i className={this.state.currentPage === number ? "circle icon" : "circle outline icon"}></i></div>
-                </div>));
+      let Pagination = Pages.map( number => (
+        <div className="Page-box" key={number}>
+          <div className={this.state.currentPage === number ? "Page-Block-sel" : "Page-Block" } onClick={() => this.Paginating(number)}>{number}</div>
+        </div>
+    ))
+     
 
+       
 
-
-
-        // Render Get Request
-        let GetResponse = this.state.loading
-            ? <div className="Loader"><i aria-hidden="true" className=" big spinner loading icon"></i></div>
-            : currentPost.map(Dataset => {
-                return (
-                    <div key={Dataset.id} className="SearchBack">
-                        {this.renderDatasetsTable(Dataset)}
+      // Render Get Request
+        let GetResponse = this.state.loading 
+        ? <div className="Loader"><i aria-hidden="true" className=" big spinner loading icon"></i></div>
+        : currentPost.map(Dataset => {
+            return (
+                <div key={Dataset.id} className="SearchBack">
+                    {this.renderDatasetsTable(Dataset)}
                     </div>
-                );
-            });
-
-        const RightArrow = this.state.currentPage < Pages.length ? < div className="RightArrow" style={this.state.display === "Enlarged" ? { display: "none" } : {}} onClick={() => this.handleShift("inc")}><i class="angle large right icon"></i></div > : < div className="RightArrow" style={this.state.display === "Enlarged" ? { display: "none" } : {}} >
-                <i class="angle large right icon"></i></div >
-
-        const LeftArrow = this.state.currentPage > 1 ? < div className="LeftArrow" style={this.state.display === "Enlarged" ? { display: "none" } : {}} onClick={() => this.handleShift("dec")}>
-            <i class="angle large left icon"></i></div > : < div className="LeftArrow" style={this.state.display === "Enlarged" ? { display: "none" } : {}} >
-                <i class="angle large left icon"></i></div >
+            );
+              })
+  
+  
   
   
   return (
@@ -332,12 +301,15 @@ class HomePage extends React.Component {
 
            <br />   
 
-              
-              {LeftArrow}
+   <div className="LeftArrow">
+<i class="angle large left icon"></i>     
+     </div>
 
-              {GetResponse}
+  {GetResponse}
 
-              {RightArrow}   
+  <div className="RightArrow">
+<i class="angle large right icon"></i>     
+     </div>
 
      
 
